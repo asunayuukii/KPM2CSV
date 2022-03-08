@@ -1,5 +1,4 @@
 import csv
-from importlib.resources import path
 from pathlib import Path
 
 class txt2csv:
