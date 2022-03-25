@@ -2,19 +2,20 @@ import csv
 from pathlib import Path
 
 class txt2csv:
-    def __init__(self, txt, lines, path):
+    def __init__(self, txt, lines, path,name):
         self.path = path
         self.txt = txt
-        self.lines = lines
+        self.lines = ''
+        self.name = name
 
     def read(self):
         with open(self.txt) as f:
-            self.lines = f.readlines()
+            self.lines = f.read().splitlines()
 
     def addcsv(self):
         header = ['name', 'url', 'username', 'password', 'note', 'cardholdername', 'cardnumber', 'cvc', 'expirydate', 'zipcode', 'folder', 'full_name', 'phone_number', 'email', 'adress1', 'adress2', 'city', 'country', 'state']
 
-        with open(self.path + '\\export.csv', 'w', newline='', encoding='UTF8') as f:
+        with open(self.path + "\\" + self.name, 'w', newline='', encoding='UTF8') as f:
             writer = csv.writer(f)
 
             writer.writerow(header)
@@ -46,12 +47,14 @@ if __name__ == "__main__":
     print('Kaspersky Password Manager Export 2 CSV\n\n')
 
     txt = input('Please enter Path to TXT File: ')
+    txt = txt.replace('"','')
 
     while(validate_txtfile(txt) == False):
         if txt.lower() == 'exit':
             exit()
 
         txt = input('Cant find .txt File. Please try again or enter exit to stop: ')
+        txt = txt.replace('"','')
 
     folder = input('Please enter where the .csv should be created [Folder Path]: ')
 
@@ -61,8 +64,17 @@ if __name__ == "__main__":
 
         folder = input('Folder not found. Please try again or enter exit to stop: ')
 
-    file2csv = txt2csv(txt, '', folder)
+    folder = folder.rstrip('\\')
+
+    name = input('Please enter the Filename [without .csv]: ')
+
+    name = name + '.csv'
+
+
+    file2csv = txt2csv(txt, '', folder, name)
     file2csv.read()
     file2csv.addcsv()
+
+
     print('\n\nfin')
     input()
